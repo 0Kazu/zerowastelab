@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZeroWaste Lab Laboratorio Clínico | Panel y Resultados</title>
+<meta name="theme-color" content="#0E7C74">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#14201D',
+          'ink-soft': '#51625C',
+          'ink-faint': '#8A968F',
+          surface: '#F3F7F6',
+          primary: { DEFAULT: '#0E7C74', dark: '#0B615B', tint: '#E4F2EF' },
+          caution: { DEFAULT: '#A9752E', tint: '#F7ECDC' },
+          whatsapp: { DEFAULT: '#25D366', dark: '#20BD5A' },
+        },
+        fontFamily: {
+          display: ['"Fraunces"', 'ui-serif', 'Georgia', 'serif'],
+          sans: ['"Public Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .faq-item.open .faq-answer { max-height: 24rem; }
+  .faq-icon { transition: transform .3s ease; }
+  .faq-item.open .faq-icon { transform: rotate(180deg); }
+</style>
+</head>
+<body class="font-sans text-ink bg-white antialiased">
+
+<!-- ===== HEADER (Igual al tuyo) ===== -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-ink-faint/25">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 sm:h-20">
+      <a href="#inicio" class="flex items-center gap-2.5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 2v6.5L4.5 18a2 2 0 0 0 1.8 2.9h11.4a2 2 0 0 0 1.8-2.9L15 8.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+        </span>
+        <span class="flex flex-col leading-tight">
+          <span class="font-display font-semibold text-ink text-lg">ZeroWaste Lab</span>
+        </span>
+      </a>
+
+      <div id="header-auth-area" class="hidden">
+        <div class="hidden md:flex items-center gap-6">
+          <div class="flex items-center gap-4 pl-4 border-l border-ink-faint/25">
+            <span class="text-sm text-ink-soft whitespace-nowrap">Hola, <span class="header-nombre-slot font-semibold text-ink"></span></span>
+            <button type="button" class="logout-trigger text-sm font-semibold text-primary hover:text-primary-dark transition-colors">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== LOBBY: AUTENTICACIÓN ===== -->
+<section id="registro" class="min-h-[calc(100vh-4rem)] flex items-center py-16 bg-white">
+  <div class="max-w-md mx-auto px-4 w-full">
+    <div id="auth-forms">
+      <div class="text-center mb-8">
+        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink">Accede a tu cuenta</h2>
+        <p class="mt-1 text-xs text-ink-faint">(Admin demo: admin@zerowastelab.com / admin)</p>
+      </div>
+
+      <div class="flex items-center justify-center gap-1 bg-surface rounded-full p-1 mb-8">
+        <button type="button" id="tab-login" class="auth-tab flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors bg-white text-primary shadow-sm">Iniciar Sesión</button>
+        <button type="button" id="tab-register" class="auth-tab flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors text-ink-soft">Crear Cuenta</button>
+      </div>
+
+      <!-- Formularios -->
+      <form id="login-form" class="space-y-4">
+        <input type="email" id="login-correo" required placeholder="tu@correo.com" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+        <input type="password" id="login-password" required placeholder="Contraseña" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+        <button type="submit" class="w-full rounded-full bg-primary text-white font-semibold px-6 py-3.5 hover:bg-primary-dark">Iniciar Sesión</button>
+      </form>
+
+      <form id="register-form" class="space-y-4 hidden">
+        <input type="text" id="register-nombre" required placeholder="Tu nombre" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+        <input type="email" id="register-correo" required placeholder="tu@correo.com" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+        <input type="password" id="register-password" required placeholder="Contraseña" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+        <button type="submit" class="w-full rounded-full bg-primary text-white font-semibold px-6 py-3.5 hover:bg-primary-dark">Crear Cuenta</button>
+      </form>
+
+      <p id="auth-mensaje" class="mt-4 text-sm text-center min-h-[1.25rem]" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTENIDO DEL SITIO ===== -->
+<div id="site-content" class="hidden">
+
+  <!-- =============================== -->
+  <!-- PANEL DE ADMINISTRACIÓN         -->
+  <!-- =============================== -->
+  <section id="admin-panel" class="hidden bg-surface py-16 min-h-[calc(100vh-4rem)]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink">Panel de Administración</h2>
+          <p class="mt-2 text-ink-soft">Asigna exámenes a los pacientes y gestiona sus resultados.</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-ink-faint/25 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-primary-tint/50 text-ink text-sm uppercase tracking-wider border-b border-ink-faint/25">
+                <th class="p-4 font-semibold">Paciente</th>
+                <th class="p-4 font-semibold">Exámenes Asignados (Estado)</th>
+                <th class="p-4 font-semibold text-center">Asignar Nuevo Examen</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table" class="divide-y divide-ink-faint/20">
+              <!-- Renderizado vía JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================== -->
+  <!-- CONTENIDO PARA PACIENTES        -->
+  <!-- =============================== -->
+  <div id="main-patient-content">
+    
+    <!-- DASHBOARD DEL PACIENTE (MIS EXÁMENES) -->
+    <section class="bg-surface py-12 border-b border-ink-faint/20">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink mb-6">Mis Exámenes</h2>
+        
+        <!-- Grid dinámico de tarjetas de exámenes -->
+        <div id="patient-exams-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Renderizado vía JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PREGUNTAS FRECUENTES (Resto de tu página) ===== -->
+    <section id="preguntas-frecuentes" class="py-16 sm:py-24 bg-white">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-center text-sm font-semibold uppercase tracking-wider text-primary mb-8">Preguntas Frecuentes</h2>
+        <div id="faq-list" class="space-y-3">
+          <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
+            <h3>
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-surface transition-colors rounded-xl">
+                <span class="faq-question-text font-semibold text-ink">¿Necesito venir en ayunas?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </h3>
+            <div class="faq-answer"><p class="px-5 pb-5 text-ink-soft">Depende del examen. Pruebas como química sanguínea requieren ayuno.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  // ============================================
+  // CATÁLOGO DE EXÁMENES DISPONIBLES EN EL LAB
+  // ============================================
+  const CATALOGO_EXAMENES = [
+    "Química Sanguínea de 6 elementos",
+    "Biometría Hemática",
+    "Examen General de Orina",
+    "Perfil Tiroideo",
+    "Prueba de Embarazo en Sangre",
+    "Perfil de Lípidos",
+    "Hemoglobina Glicosilada"
+  ];
+
+  const AUTH_USERS_KEY = 'zerowastelab_usuarios';
+  const AUTH_SESSION_KEY = 'zerowastelab_sesion';
+
+  // Acordeón UI
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach((item) => {
+    item.querySelector('.faq-question').addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+  });
+
+  // Utilidades LocalStorage
+  function obtenerUsuarios() {
+    try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || []; } catch (e) { return []; }
+  }
+  function guardarUsuarios(usuarios) {
+    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(usuarios));
+  }
+  function obtenerSesion() {
+    try { return JSON.parse(localStorage.getItem(AUTH_SESSION_KEY)); } catch (e) { return null; }
+  }
+
+  // Inicializar Admin
+  function inicializarAdmin() {
+    const usuarios = obtenerUsuarios();
+    if (!usuarios.some(u => u.correo === 'admin@zerowastelab.com')) {
+      usuarios.push({ nombre: 'Admin General', correo: 'admin@zerowastelab.com', password: 'admin', rol: 'admin', examenes: [] });
+      guardarUsuarios(usuarios);
+    }
+  }
+
+  const authSection = document.getElementById('registro');
+  const siteContent = document.getElementById('site-content');
+  const mainPatientContent = document.getElementById('main-patient-content');
+  const adminPanel = document.getElementById('admin-panel');
+
+  // ============================================
+  // NUEVO BACKEND: PANEL DE ADMINISTRADOR
+  // ============================================
+  async function renderAdminPanel() {
+    const tableBody = document.getElementById('admin-users-table');
+    tableBody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-ink-soft">Cargando datos...</td></tr>';
+
+    try {
+      // 1. Pedimos los pacientes y el catálogo a la base de datos
+      const [resPacientes, resCatalogo] = await Promise.all([
+        fetch('/api/examenes/pacientes'),
+        fetch('/api/examenes/catalogo')
+      ]);
+      
+      const pacientes = await resPacientes.json();
+      const catalogo = await resCatalogo.json();
+
+      tableBody.innerHTML = '';
+
+      if (pacientes.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-ink-soft">No hay pacientes registrados aún.</td></tr>';
+        return;
+      }
+
+      pacientes.forEach((u) => {
+        // Renderizar los exámenes asignados usando datos de MySQL
+        let examenesHTML = u.examenes.map((ex) => `
+          <div class="flex items-center justify-between gap-2 bg-surface p-2 rounded-lg mb-2 border border-ink-faint/10">
+            <span class="text-sm font-medium text-ink">${ex.nombre}</span>
+            <button onclick="window.cambiarEstadoExamen(${ex.asignacion_id}, '${ex.estado}')" 
+              class="text-xs font-semibold px-3 py-1 rounded-full transition-colors ${ex.estado === 'listo' ? 'bg-whatsapp/10 text-whatsapp-dark hover:bg-whatsapp/20' : 'bg-caution-tint text-caution hover:bg-caution/30'}">
+              ${ex.estado === 'listo' ? '✅ Listo' : '⏳ Pendiente'}
+            </button>
+          </div>
+        `).join('');
+        
+        if (!examenesHTML) examenesHTML = '<span class="text-sm text-ink-faint italic">Ningún examen asignado</span>';
+
+        // Crear opciones del Dropdown usando el ID real del catálogo
+        let optionsHTML = catalogo.map(cat => `<option value="${cat.id}">${cat.nombre}</option>`).join('');
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-surface/50 transition-colors';
+        tr.innerHTML = `
+          <td class="p-4 align-top">
+            <div class="font-medium text-ink">${u.nombre}</div>
+            <div class="text-sm text-ink-soft">${u.correo}</div>
+          </td>
+          <td class="p-4 align-top min-w-[300px]">${examenesHTML}</td>
+          <td class="p-4 align-top text-center">
+            <div class="flex flex-col gap-2 max-w-[200px] mx-auto">
+              <select id="select-exam-${u.id}" class="text-sm rounded-lg border border-ink-faint/30 px-2 py-2 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+                ${optionsHTML}
+              </select>
+              <button onclick="window.asignarExamen(${u.id})" class="text-sm font-semibold bg-primary text-white rounded-lg px-4 py-2 hover:bg-primary-dark transition-colors">
+                + Asignar
+              </button>
+            </div>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    } catch (error) {
+      console.error('Error cargando panel admin:', error);
+      tableBody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-red-500">Error al conectar con la base de datos.</td></tr>';
+    }
+  }
+
+  // Enviar a MySQL la asignación del examen
+  window.asignarExamen = async function(usuario_id) {
+    const select = document.getElementById(`select-exam-${usuario_id}`);
+    const examen_id = select.value;
+
+    try {
+      const respuesta = await fetch('/api/examenes/asignar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario_id, examen_id })
+      });
+      
+      const data = await respuesta.json();
+      if (!respuesta.ok) {
+        alert(data.mensaje); // "Este paciente ya tiene este examen..."
+        return;
+      }
+      renderAdminPanel(); // Refrescar la tabla en vivo
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Enviar a MySQL el cambio de Pendiente a Listo
+  window.cambiarEstadoExamen = async function(asignacion_id, estado_actual) {
+    try {
+      await fetch('/api/examenes/estado', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ asignacion_id, estado_actual })
+      });
+      renderAdminPanel(); // Refrescar la tabla en vivo
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Función Admin: Asignar un nuevo examen
+  window.asignarExamen = function(correo) {
+    const select = document.getElementById(`select-exam-${correo}`);
+    const examenElegido = select.value;
+    const usuarios = obtenerUsuarios();
+    const index = usuarios.findIndex(u => u.correo === correo);
+
+    if (index !== -1) {
+      if (!usuarios[index].examenes) usuarios[index].examenes = [];
+      
+      // Evitar asignar el mismo examen si aún está pendiente
+      const yaExiste = usuarios[index].examenes.find(e => e.nombre === examenElegido && e.estado === 'pendiente');
+      if (yaExiste) {
+        alert('Este usuario ya tiene este examen asignado y pendiente.');
+        return;
+      }
+
+      usuarios[index].examenes.push({ nombre: examenElegido, estado: 'pendiente' });
+      guardarUsuarios(usuarios);
+      renderAdminPanel(); // Refrescar UI
+    }
+  };
+
+  // Función Admin: Cambiar de Pendiente a Listo
+  window.cambiarEstadoExamen = function(correo, examIndex) {
+    const usuarios = obtenerUsuarios();
+    const index = usuarios.findIndex(u => u.correo === correo);
+    if (index !== -1 && usuarios[index].examenes[examIndex]) {
+      const estadoActual = usuarios[index].examenes[examIndex].estado;
+      usuarios[index].examenes[examIndex].estado = (estadoActual === 'pendiente') ? 'listo' : 'pendiente';
+      guardarUsuarios(usuarios);
+      renderAdminPanel(); // Refrescar UI
+    }
+  };
+
+
+  // ============================================
+  // NUEVO BACKEND: PANEL DEL PACIENTE
+  // ============================================
+  async function renderPatientDashboard(usuarioActivo) {
+    const grid = document.getElementById('patient-exams-grid');
+    grid.innerHTML = '<p class="col-span-full text-center py-8 text-ink-soft">Buscando tus resultados...</p>';
+
+    try {
+      const respuesta = await fetch(`/api/examenes/mis-examenes/${usuarioActivo.correo}`);
+      const examenes = await respuesta.json();
+
+      if (examenes.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center rounded-2xl border-2 border-dashed border-ink-faint/30 bg-white">
+            <p class="text-ink-soft">Aún no tienes exámenes asignados.</p>
+            <p class="text-sm text-ink-faint mt-1">Acércate a ventanilla para agendar tu cita.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = examenes.map(ex => `
+        <div class="p-5 rounded-2xl border ${ex.estado === 'listo' ? 'border-whatsapp/30 bg-whatsapp/5' : 'border-ink-faint/25 bg-white'} shadow-sm flex flex-col justify-between h-full">
+          <div>
+            <span class="inline-block text-[10px] uppercase tracking-wider font-bold mb-2 ${ex.estado === 'listo' ? 'text-whatsapp-dark' : 'text-caution'}">
+              ${ex.estado === 'listo' ? 'FINALIZADO' : 'EN PROCESO'}
+            </span>
+            <h3 class="font-semibold text-ink leading-tight text-lg mb-4">${ex.nombre}</h3>
+          </div>
+          
+          <div class="mt-auto border-t ${ex.estado === 'listo' ? 'border-whatsapp/20' : 'border-ink-faint/20'} pt-4 flex items-center justify-between">
+            ${ex.estado === 'listo' 
+              ? `<span class="text-sm font-medium text-whatsapp-dark flex items-center gap-1">
+                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Listo
+                 </span>
+                 <button class="text-xs font-semibold bg-white border border-whatsapp-dark/30 text-whatsapp-dark px-4 py-2 rounded-full hover:bg-whatsapp hover:text-white transition-colors">
+                   Ver PDF
+                 </button>` 
+              : `<span class="text-sm font-medium text-caution flex items-center gap-1">
+                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Pendiente
+                 </span>`
+            }
+          </div>
+        </div>
+      `).join('');
+    } catch (error) {
+      console.error(error);
+      grid.innerHTML = '<p class="col-span-full text-center text-red-500">Error al cargar tus exámenes.</p>';
+    }
+  }
+  
+
+  // ============================================
+  // LÓGICA DE NAVEGACIÓN Y SESIÓN
+  // ============================================
+  function mostrarSitio(usuarioActivo) {
+    document.querySelectorAll('.header-nombre-slot').forEach(el => el.textContent = usuarioActivo.nombre);
+    
+    authSection.classList.add('hidden');
+    siteContent.classList.remove('hidden');
+    document.getElementById('header-auth-area').classList.remove('hidden');
+    mainPatientContent.classList.add('hidden');
+    adminPanel.classList.add('hidden');
+
+    if (usuarioActivo.rol === 'admin') {
+      adminPanel.classList.remove('hidden');
+      renderAdminPanel();
+    } else {
+      mainPatientContent.classList.remove('hidden');
+      renderPatientDashboard(usuarioActivo);
+    }
+  }
+
+  function mostrarGate() {
+    siteContent.classList.add('hidden');
+    authSection.classList.remove('hidden');
+    document.getElementById('header-auth-area').classList.add('hidden');
+  }
+
+  function iniciarSesion(usuario) {
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ nombre: usuario.nombre, correo: usuario.correo, rol: usuario.rol }));
+    mostrarSitio(usuario);
+  }
+
+  // Inicialización
+  inicializarAdmin();
+  const sesionActiva = obtenerSesion();
+  if (sesionActiva && sesionActiva.correo) {
+    mostrarSitio(sesionActiva);
+  }
+
+  // Formularios de Login/Registro
+  const tabLogin = document.getElementById('tab-login');
+  const tabRegister = document.getElementById('tab-register');
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+  const authMensaje = document.getElementById('auth-mensaje');
+
+  function activarTab(tab) {
+    const esLogin = tab === 'login';
+    tabLogin.classList.toggle('bg-white', esLogin);
+    tabLogin.classList.toggle('text-primary', esLogin);
+    tabLogin.classList.toggle('text-ink-soft', !esLogin);
+    tabRegister.classList.toggle('bg-white', !esLogin);
+    tabRegister.classList.toggle('text-primary', !esLogin);
+    tabRegister.classList.toggle('text-ink-soft', esLogin);
+    loginForm.classList.toggle('hidden', !esLogin);
+    registerForm.classList.toggle('hidden', esLogin);
+    authMensaje.textContent = '';
+  }
+
+  tabLogin.addEventListener('click', () => activarTab('login'));
+  tabRegister.addEventListener('click', () => activarTab('register'));
+
+  // ============================================
+  // NUEVO BACKEND: REGISTRO DE USUARIO
+  // ============================================
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nombre = document.getElementById('register-nombre').value.trim();
+    const correo = document.getElementById('register-correo').value.trim().toLowerCase();
+    const password = document.getElementById('register-password').value;
+
+    try {
+      // Hacemos la petición POST a nuestra nueva ruta
+      const respuesta = await fetch('/api/auth/registro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, correo, password })
+      });
+
+      const datos = await respuesta.json();
+
+      // Si el servidor responde con un error (ej. correo ya existe)
+      if (!respuesta.ok) {
+        authMensaje.textContent = datos.mensaje || 'Error al crear la cuenta.';
+        authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
+        return;
+      }
+
+      // Si fue exitoso, guardamos la sesión y entramos
+      iniciarSesion(datos);
+      
+    } catch (error) {
+      console.error(error);
+      authMensaje.textContent = 'No se pudo conectar con el servidor.';
+      authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
+    }
+  });
+
+  // ============================================
+  // NUEVO BACKEND: LOGIN DE USUARIO
+  // ============================================
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const correo = document.getElementById('login-correo').value.trim().toLowerCase();
+    const password = document.getElementById('login-password').value;
+
+    try {
+      // Hacemos la petición POST a nuestra ruta de login
+      const respuesta = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo, password })
+      });
+
+      const datos = await respuesta.json();
+
+      // Si las credenciales son incorrectas
+      if (!respuesta.ok) {
+        authMensaje.textContent = datos.mensaje || 'Error al iniciar sesión.';
+        authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
+        return;
+      }
+
+      // Si fue exitoso, guardamos la sesión local y entramos
+      iniciarSesion(datos);
+
+    } catch (error) {
+      console.error(error);
+      authMensaje.textContent = 'No se pudo conectar con el servidor.';
+      authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
+    }
+  });
+
+  document.querySelectorAll('.logout-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      localStorage.removeItem(AUTH_SESSION_KEY);
+      mostrarGate();
+    });
+  });
+</script>
+</body>
+</html>
