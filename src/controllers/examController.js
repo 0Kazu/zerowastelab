@@ -37,18 +37,18 @@ const obtenerPacientes = async (req, res) => {
     }
 };
 
-// 3. Asignar un examen a un paciente (Admin)
+// 3. Asignar un examen a un paciente (Admin) - AHORA EVITA TODOS LOS DUPLICADOS
 const asignarExamen = async (req, res) => {
     const { usuario_id, examen_id } = req.body;
     try {
-        // Usamos comillas simples para 'pendiente'
+        // Le quitamos lo de "estado = 'pendiente'" para que busque si el examen ya existe en su historial, punto.
         const [existe] = await pool.query(
-            "SELECT id FROM examenes_asignados WHERE usuario_id = ? AND examen_id = ? AND estado = 'pendiente'",
+            "SELECT id FROM examenes_asignados WHERE usuario_id = ? AND examen_id = ?",
             [usuario_id, examen_id]
         );
 
         if (existe.length > 0) {
-            return res.status(400).json({ mensaje: 'Este paciente ya tiene este examen pendiente.' });
+            return res.status(400).json({ mensaje: 'El paciente ya tiene asignado este examen.' });
         }
 
         await pool.query(
@@ -95,10 +95,24 @@ const obtenerMisExamenes = async (req, res) => {
     }
 };
 
+// 6. NUEVA FUNCIÓN: Eliminar un examen asignado
+const eliminarExamen = async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM examenes_asignados WHERE id = ?', [id]);
+        res.json({ mensaje: 'Examen eliminado correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar:', error);
+        res.status(500).json({ mensaje: 'Error al eliminar examen' });
+    }
+};
+
+// Asegúrate de exportar la nueva función al final del archivo:
 module.exports = { 
     obtenerCatalogo, 
     obtenerPacientes, 
     asignarExamen, 
     cambiarEstado, 
-    obtenerMisExamenes 
+    obtenerMisExamenes,
+    eliminarExamen 
 };

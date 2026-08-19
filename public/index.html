@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZeroWaste Lab Laboratorio Clínico | Panel y Resultados</title>
+<meta name="description" content="Laboratorio clínico enfocado en resolver tus dudas antes del examen: preparación, tiempos de entrega de resultados, catálogo de estudios y agendamiento por WhatsApp.">
 <meta name="theme-color" content="#0E7C74">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
 
@@ -36,15 +37,29 @@
 
 <style>
   html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
   .faq-answer { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
   .faq-item.open .faq-answer { max-height: 24rem; }
   .faq-icon { transition: transform .3s ease; }
   .faq-item.open .faq-icon { transform: rotate(180deg); }
+  a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid #0E7C74;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
 </style>
 </head>
 <body class="font-sans text-ink bg-white antialiased">
 
-<!-- ===== HEADER (Igual al tuyo) ===== -->
+<!-- ===== HEADER ===== -->
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-ink-faint/25">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 sm:h-20">
@@ -54,27 +69,53 @@
         </span>
         <span class="flex flex-col leading-tight">
           <span class="font-display font-semibold text-ink text-lg">ZeroWaste Lab</span>
+          <span class="text-[10px] uppercase tracking-wider text-ink-faint">Laboratorio Clínico</span>
         </span>
       </a>
 
       <div id="header-auth-area" class="hidden">
         <div class="hidden md:flex items-center gap-6">
+          <nav class="flex items-center gap-6 text-sm font-medium text-ink-soft" id="patient-nav-links">
+            <a href="#inicio" class="hover:text-primary-dark transition-colors">Inicio</a>
+            <a href="#preguntas-frecuentes" class="hover:text-primary-dark transition-colors">Preguntas Frecuentes</a>
+            <a href="#examenes" class="hover:text-primary-dark transition-colors">Catálogo</a>
+          </nav>
           <div class="flex items-center gap-4 pl-4 border-l border-ink-faint/25">
             <span class="text-sm text-ink-soft whitespace-nowrap">Hola, <span class="header-nombre-slot font-semibold text-ink"></span></span>
-            <button type="button" class="logout-trigger text-sm font-semibold text-primary hover:text-primary-dark transition-colors">Cerrar sesión</button>
+            <button type="button" class="logout-trigger text-sm font-semibold text-ink-soft hover:text-ink transition-colors">Cerrar sesión</button>
           </div>
         </div>
+
+        <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-ink-soft hover:bg-surface">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="hidden md:hidden border-t border-ink-faint/25 bg-white px-4 py-4 space-y-1">
+    <div id="mobile-patient-nav">
+      <a href="#inicio" class="block px-2 py-2 rounded-lg text-ink-soft font-medium hover:bg-surface">Inicio</a>
+      <a href="#preguntas-frecuentes" class="block px-2 py-2 rounded-lg text-ink-soft font-medium hover:bg-surface">Preguntas Frecuentes</a>
+      <a href="#examenes" class="block px-2 py-2 rounded-lg text-ink-soft font-medium hover:bg-surface">Exámenes</a>
+    </div>
+    <div class="flex items-center justify-between px-2 pt-3 mt-2 border-t border-ink-faint/20">
+      <span class="text-sm text-ink-soft">Hola, <span class="header-nombre-slot font-semibold text-ink"></span></span>
+      <button type="button" class="logout-trigger text-sm font-semibold text-primary">Cerrar sesión</button>
     </div>
   </div>
 </header>
 
 <!-- ===== LOBBY: AUTENTICACIÓN ===== -->
-<section id="registro" class="min-h-[calc(100vh-4rem)] flex items-center py-16 bg-white">
+<section id="registro" class="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] flex items-center py-16 bg-white">
   <div class="max-w-md mx-auto px-4 w-full">
     <div id="auth-forms">
       <div class="text-center mb-8">
+        <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-white mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M9 2v6.5L4.5 18a2 2 0 0 0 1.8 2.9h11.4a2 2 0 0 0 1.8-2.9L15 8.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+        </span>
         <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink">Accede a tu cuenta</h2>
+        <p class="mt-3 text-ink-soft">Inicia sesión o crea una cuenta para entrar a ZeroWaste Lab.</p>
         <p class="mt-1 text-xs text-ink-faint">(Admin demo: admin@zerowastelab.com / admin)</p>
       </div>
 
@@ -83,21 +124,35 @@
         <button type="button" id="tab-register" class="auth-tab flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors text-ink-soft">Crear Cuenta</button>
       </div>
 
-      <!-- Formularios -->
       <form id="login-form" class="space-y-4">
-        <input type="email" id="login-correo" required placeholder="tu@correo.com" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
-        <input type="password" id="login-password" required placeholder="Contraseña" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
-        <button type="submit" class="w-full rounded-full bg-primary text-white font-semibold px-6 py-3.5 hover:bg-primary-dark">Iniciar Sesión</button>
+        <div>
+          <label for="login-correo" class="block text-sm font-medium text-ink mb-1.5">Correo electrónico</label>
+          <input type="email" id="login-correo" required placeholder="tu@correo.com" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <div>
+          <label for="login-password" class="block text-sm font-medium text-ink mb-1.5">Contraseña</label>
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <button type="submit" class="w-full rounded-full bg-primary text-white font-semibold px-6 py-3.5 hover:bg-primary-dark transition-colors">Iniciar Sesión</button>
       </form>
 
       <form id="register-form" class="space-y-4 hidden">
-        <input type="text" id="register-nombre" required placeholder="Tu nombre" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
-        <input type="email" id="register-correo" required placeholder="tu@correo.com" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
-        <input type="password" id="register-password" required placeholder="Contraseña" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary">
-        <button type="submit" class="w-full rounded-full bg-primary text-white font-semibold px-6 py-3.5 hover:bg-primary-dark">Crear Cuenta</button>
+        <div>
+          <label for="register-nombre" class="block text-sm font-medium text-ink mb-1.5">Nombre completo</label>
+          <input type="text" id="register-nombre" required placeholder="Tu nombre" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <div>
+          <label for="register-correo" class="block text-sm font-medium text-ink mb-1.5">Correo electrónico</label>
+          <input type="email" id="register-correo" required placeholder="tu@correo.com" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <div>
+          <label for="register-password" class="block text-sm font-medium text-ink mb-1.5">Contraseña</label>
+          <input type="password" id="register-password" required placeholder="Mínimo 6 caracteres" class="w-full rounded-xl border border-ink-faint/30 bg-white px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <button type="submit" class="w-full rounded-full bg-primary text-white font-semibold px-6 py-3.5 hover:bg-primary-dark transition-colors">Crear Cuenta</button>
       </form>
 
-      <p id="auth-mensaje" class="mt-4 text-sm text-center min-h-[1.25rem]" role="status"></p>
+      <p id="auth-mensaje" class="mt-4 text-sm text-center min-h-[1.25rem]" role="status" aria-live="polite"></p>
     </div>
   </div>
 </section>
@@ -108,7 +163,7 @@
   <!-- =============================== -->
   <!-- PANEL DE ADMINISTRACIÓN         -->
   <!-- =============================== -->
-  <section id="admin-panel" class="hidden bg-surface py-16 min-h-[calc(100vh-4rem)]">
+  <section id="admin-panel" class="hidden bg-surface py-12 min-h-[calc(100vh-4rem)] border-b border-ink-faint/20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -142,9 +197,10 @@
   <div id="main-patient-content">
     
     <!-- DASHBOARD DEL PACIENTE (MIS EXÁMENES) -->
-    <section class="bg-surface py-12 border-b border-ink-faint/20">
+    <section class="bg-surface pt-12 pb-16 border-b border-ink-faint/20" id="inicio">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink mb-6">Mis Exámenes</h2>
+        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink mb-2">Mis Exámenes</h2>
+        <p class="text-ink-soft mb-8">Revisa el estado y los resultados de tus pruebas de laboratorio.</p>
         
         <!-- Grid dinámico de tarjetas de exámenes -->
         <div id="patient-exams-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -153,45 +209,113 @@
       </div>
     </section>
 
-    <!-- ===== PREGUNTAS FRECUENTES (Resto de tu página) ===== -->
+    <!-- ===== PREGUNTAS FRECUENTES ===== -->
     <section id="preguntas-frecuentes" class="py-16 sm:py-24 bg-white">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-center text-sm font-semibold uppercase tracking-wider text-primary mb-8">Preguntas Frecuentes</h2>
+
         <div id="faq-list" class="space-y-3">
           <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
             <h3>
-              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 hover:bg-surface transition-colors rounded-xl">
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl">
                 <span class="faq-question-text font-semibold text-ink">¿Necesito venir en ayunas?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
             </h3>
-            <div class="faq-answer"><p class="px-5 pb-5 text-ink-soft">Depende del examen. Pruebas como química sanguínea requieren ayuno.</p></div>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Depende del examen. Pruebas como la química sanguínea (glucosa, colesterol, triglicéridos) suelen requerir entre 8 y 12 horas de ayuno. Otras, como la biometría hemática o el examen general de orina, no lo requieren.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
+            <h3>
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl">
+                <span class="faq-question-text font-semibold text-ink">¿Cuánto tiempo tarda la entrega de resultados?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </h3>
+            <div class="faq-answer">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">La mayoría de los exámenes de rutina están listos en 24 horas. Algunos estudios especializados pueden tardar entre 2 y 5 días hábiles. Podrás revisarlos directamente aquí en tu panel.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CATÁLOGO DE EXÁMENES ===== -->
+    <section id="examenes" class="bg-surface border-y border-ink-faint/25 py-16 sm:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-ink">Catálogo de Exámenes Populares</h2>
+          <p class="mt-3 text-ink-soft">Conoce nuestros estudios frecuentes y sus requisitos.</p>
+        </div>
+
+        <div id="exam-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Cards estáticas de ejemplo -->
+          <div class="exam-card bg-white border border-ink-faint/25 rounded-xl p-5 hover:shadow-md hover:border-primary/30 transition-all">
+            <span class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-tint text-primary mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 2v6.5L4.5 18a2 2 0 0 0 1.8 2.9h11.4a2 2 0 0 0 1.8-2.9L15 8.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+            </span>
+            <h3 class="font-semibold text-ink mb-2">Biometría Hemática</h3>
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary-tint rounded-full px-3 py-1"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>Sin ayuno necesario</span>
+          </div>
+
+          <div class="exam-card bg-white border border-ink-faint/25 rounded-xl p-5 hover:shadow-md hover:border-primary/30 transition-all">
+            <span class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-tint text-primary mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 2v6.5L4.5 18a2 2 0 0 0 1.8 2.9h11.4a2 2 0 0 0 1.8-2.9L15 8.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+            </span>
+            <h3 class="font-semibold text-ink mb-2">Química Sanguínea</h3>
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-caution bg-caution-tint rounded-full px-3 py-1"><span class="w-1.5 h-1.5 rounded-full bg-caution"></span>Ayuno de 8 a 12 h</span>
+          </div>
+          
+          <div class="exam-card bg-white border border-ink-faint/25 rounded-xl p-5 hover:shadow-md hover:border-primary/30 transition-all">
+            <span class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-tint text-primary mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 2v6.5L4.5 18a2 2 0 0 0 1.8 2.9h11.4a2 2 0 0 0 1.8-2.9L15 8.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+            </span>
+            <h3 class="font-semibold text-ink mb-2">Examen General de Orina</h3>
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary-tint rounded-full px-3 py-1"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>Primera muestra matutina</span>
           </div>
         </div>
       </div>
     </section>
 
   </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="contacto" class="bg-ink text-white/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 2v6.5L4.5 18a2 2 0 0 0 1.8 2.9h11.4a2 2 0 0 0 1.8-2.9L15 8.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
+          </span>
+          <span class="font-display font-semibold text-white text-lg">ZeroWaste Lab</span>
+        </div>
+        <p class="text-sm leading-relaxed max-w-xs">Laboratorio clínico comprometido con la claridad, la rapidez y la confianza de cada paciente.</p>
+      </div>
+      <div class="md:text-right">
+        <h3 class="text-white font-semibold mb-4">¿Necesitas ayuda?</h3>
+        <p class="text-sm">Escríbenos por WhatsApp o correo electrónico.<br>contacto@zerowastelab.com</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-white/45">
+        <span>© 2026 ZeroWaste Lab Laboratorio Clínico. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
 </div>
 
-<script>
-  // ============================================
-  // CATÁLOGO DE EXÁMENES DISPONIBLES EN EL LAB
-  // ============================================
-  const CATALOGO_EXAMENES = [
-    "Química Sanguínea de 6 elementos",
-    "Biometría Hemática",
-    "Examen General de Orina",
-    "Perfil Tiroideo",
-    "Prueba de Embarazo en Sangre",
-    "Perfil de Lípidos",
-    "Hemoglobina Glicosilada"
-  ];
+<!-- ===== BOTÓN FLOTANTE DE WHATSAPP ===== -->
+<a href="https://wa.me/000000000000" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp" class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 inline-flex items-center justify-center w-14 h-14 rounded-full bg-whatsapp text-white shadow-lg hover:scale-105 transition-transform">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M12 2C6.48 2 2 6.13 2 11.22c0 2.9 1.47 5.49 3.78 7.19-.13 1.15-.5 2.6-1.45 4.09a.5.5 0 0 0 .58.74c2.1-.7 3.7-1.66 4.72-2.4.75.14 1.53.22 2.37.22 5.52 0 10-4.13 10-9.84C22 6.13 17.52 2 12 2z"/></svg>
+</a>
 
-  const AUTH_USERS_KEY = 'zerowastelab_usuarios';
+<script>
   const AUTH_SESSION_KEY = 'zerowastelab_sesion';
 
-  // Acordeón UI
+  // Acordeón UI para preguntas frecuentes[cite: 1]
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach((item) => {
     item.querySelector('.faq-question').addEventListener('click', () => {
@@ -199,40 +323,38 @@
     });
   });
 
-  // Utilidades LocalStorage
-  function obtenerUsuarios() {
-    try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || []; } catch (e) { return []; }
-  }
-  function guardarUsuarios(usuarios) {
-    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(usuarios));
-  }
-  function obtenerSesion() {
-    try { return JSON.parse(localStorage.getItem(AUTH_SESSION_KEY)); } catch (e) { return null; }
+  // Menú móvil[cite: 1]
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
   }
 
-  // Inicializar Admin
-  function inicializarAdmin() {
-    const usuarios = obtenerUsuarios();
-    if (!usuarios.some(u => u.correo === 'admin@zerowastelab.com')) {
-      usuarios.push({ nombre: 'Admin General', correo: 'admin@zerowastelab.com', password: 'admin', rol: 'admin', examenes: [] });
-      guardarUsuarios(usuarios);
-    }
+  // Utilidades LocalStorage para la Sesión actual
+  function obtenerSesion() {
+    try { return JSON.parse(localStorage.getItem(AUTH_SESSION_KEY)); } catch (e) { return null; }
   }
 
   const authSection = document.getElementById('registro');
   const siteContent = document.getElementById('site-content');
   const mainPatientContent = document.getElementById('main-patient-content');
   const adminPanel = document.getElementById('admin-panel');
+  const navLinks = document.getElementById('patient-nav-links');
+  const mobileNav = document.getElementById('mobile-patient-nav');
 
   // ============================================
-  // NUEVO BACKEND: PANEL DE ADMINISTRADOR
+  // BACKEND: PANEL DE ADMINISTRADOR
   // ============================================
   async function renderAdminPanel() {
     const tableBody = document.getElementById('admin-users-table');
     tableBody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-ink-soft">Cargando datos...</td></tr>';
 
     try {
-      // 1. Pedimos los pacientes y el catálogo a la base de datos
       const [resPacientes, resCatalogo] = await Promise.all([
         fetch('/api/examenes/pacientes'),
         fetch('/api/examenes/catalogo')
@@ -249,20 +371,24 @@
       }
 
       pacientes.forEach((u) => {
-        // Renderizar los exámenes asignados usando datos de MySQL
         let examenesHTML = u.examenes.map((ex) => `
-          <div class="flex items-center justify-between gap-2 bg-surface p-2 rounded-lg mb-2 border border-ink-faint/10">
+          <div class="flex items-center justify-between gap-2 bg-surface p-2.5 rounded-lg mb-2 border border-ink-faint/10">
             <span class="text-sm font-medium text-ink">${ex.nombre}</span>
-            <button onclick="window.cambiarEstadoExamen(${ex.asignacion_id}, '${ex.estado}')" 
-              class="text-xs font-semibold px-3 py-1 rounded-full transition-colors ${ex.estado === 'listo' ? 'bg-whatsapp/10 text-whatsapp-dark hover:bg-whatsapp/20' : 'bg-caution-tint text-caution hover:bg-caution/30'}">
-              ${ex.estado === 'listo' ? '✅ Listo' : '⏳ Pendiente'}
-            </button>
+            <div class="flex gap-2">
+              <button onclick="window.cambiarEstadoExamen(${ex.asignacion_id}, '${ex.estado}')" 
+                class="text-xs font-semibold px-3 py-1.5 rounded-full transition-colors shadow-sm ${ex.estado === 'listo' ? 'bg-whatsapp/15 text-whatsapp-dark hover:bg-whatsapp/25' : 'bg-caution-tint text-caution hover:bg-caution/30'}">
+                ${ex.estado === 'listo' ? '✅ Listo' : '⏳ Pendiente'}
+              </button>
+              <button onclick="window.eliminarExamen(${ex.asignacion_id})" title="Eliminar examen"
+                class="text-xs bg-red-50 text-red-500 px-2.5 py-1.5 rounded-full hover:bg-red-100 transition-colors shadow-sm">
+                🗑️
+              </button>
+            </div>
           </div>
         `).join('');
         
         if (!examenesHTML) examenesHTML = '<span class="text-sm text-ink-faint italic">Ningún examen asignado</span>';
 
-        // Crear opciones del Dropdown usando el ID real del catálogo
         let optionsHTML = catalogo.map(cat => `<option value="${cat.id}">${cat.nombre}</option>`).join('');
 
         const tr = document.createElement('tr');
@@ -275,10 +401,10 @@
           <td class="p-4 align-top min-w-[300px]">${examenesHTML}</td>
           <td class="p-4 align-top text-center">
             <div class="flex flex-col gap-2 max-w-[200px] mx-auto">
-              <select id="select-exam-${u.id}" class="text-sm rounded-lg border border-ink-faint/30 px-2 py-2 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-primary">
+              <select id="select-exam-${u.id}" class="text-sm rounded-lg border border-ink-faint/30 px-3 py-2.5 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-primary shadow-sm">
                 ${optionsHTML}
               </select>
-              <button onclick="window.asignarExamen(${u.id})" class="text-sm font-semibold bg-primary text-white rounded-lg px-4 py-2 hover:bg-primary-dark transition-colors">
+              <button onclick="window.asignarExamen(${u.id})" class="text-sm font-semibold bg-primary text-white rounded-lg px-4 py-2.5 hover:bg-primary-dark transition-colors shadow-sm">
                 + Asignar
               </button>
             </div>
@@ -292,7 +418,7 @@
     }
   }
 
-  // Enviar a MySQL la asignación del examen
+  // Funciones Admin hacia el Backend
   window.asignarExamen = async function(usuario_id) {
     const select = document.getElementById(`select-exam-${usuario_id}`);
     const examen_id = select.value;
@@ -303,19 +429,12 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usuario_id, examen_id })
       });
-      
       const data = await respuesta.json();
-      if (!respuesta.ok) {
-        alert(data.mensaje); // "Este paciente ya tiene este examen..."
-        return;
-      }
-      renderAdminPanel(); // Refrescar la tabla en vivo
-    } catch (error) {
-      console.error(error);
-    }
+      if (!respuesta.ok) { alert(data.mensaje); return; }
+      renderAdminPanel();
+    } catch (error) { console.error(error); }
   };
 
-  // Enviar a MySQL el cambio de Pendiente a Listo
   window.cambiarEstadoExamen = async function(asignacion_id, estado_actual) {
     try {
       await fetch('/api/examenes/estado', {
@@ -323,14 +442,20 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ asignacion_id, estado_actual })
       });
-      renderAdminPanel(); // Refrescar la tabla en vivo
-    } catch (error) {
-      console.error(error);
-    }
+      renderAdminPanel();
+    } catch (error) { console.error(error); }
+  };
+
+  window.eliminarExamen = async function(asignacion_id) {
+    if (!confirm('¿Estás seguro de que deseas eliminar este examen del paciente?')) return;
+    try {
+      const respuesta = await fetch(`/api/examenes/asignacion/${asignacion_id}`, { method: 'DELETE' });
+      if (respuesta.ok) { renderAdminPanel(); } else { alert('Error al intentar eliminar el examen.'); }
+    } catch (error) { console.error(error); }
   };
 
   // ============================================
-  // NUEVO BACKEND: PANEL DEL PACIENTE
+  // BACKEND: DASHBOARD DE PACIENTES
   // ============================================
   async function renderPatientDashboard(usuarioActivo) {
     const grid = document.getElementById('patient-exams-grid');
@@ -343,14 +468,14 @@
       if (examenes.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full py-12 text-center rounded-2xl border-2 border-dashed border-ink-faint/30 bg-white">
-            <p class="text-ink-soft">Aún no tienes exámenes asignados.</p>
+            <p class="text-ink-soft font-medium">Aún no tienes exámenes asignados.</p>
             <p class="text-sm text-ink-faint mt-1">Acércate a ventanilla para agendar tu cita.</p>
           </div>`;
         return;
       }
 
       grid.innerHTML = examenes.map(ex => `
-        <div class="p-5 rounded-2xl border ${ex.estado === 'listo' ? 'border-whatsapp/30 bg-whatsapp/5' : 'border-ink-faint/25 bg-white'} shadow-sm flex flex-col justify-between h-full">
+        <div class="p-5 rounded-2xl border ${ex.estado === 'listo' ? 'border-whatsapp/30 bg-whatsapp/5' : 'border-ink-faint/25 bg-white'} shadow-sm flex flex-col justify-between h-full hover:shadow-md transition-shadow">
           <div>
             <span class="inline-block text-[10px] uppercase tracking-wider font-bold mb-2 ${ex.estado === 'listo' ? 'text-whatsapp-dark' : 'text-caution'}">
               ${ex.estado === 'listo' ? 'FINALIZADO' : 'EN PROCESO'}
@@ -363,7 +488,7 @@
               ? `<span class="text-sm font-medium text-whatsapp-dark flex items-center gap-1">
                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Listo
                  </span>
-                 <button class="text-xs font-semibold bg-white border border-whatsapp-dark/30 text-whatsapp-dark px-4 py-2 rounded-full hover:bg-whatsapp hover:text-white transition-colors">
+                 <button class="text-xs font-semibold bg-white border border-whatsapp-dark/30 text-whatsapp-dark px-4 py-2 rounded-full hover:bg-whatsapp hover:text-white transition-colors shadow-sm">
                    Ver PDF
                  </button>` 
               : `<span class="text-sm font-medium text-caution flex items-center gap-1">
@@ -378,7 +503,6 @@
       grid.innerHTML = '<p class="col-span-full text-center text-red-500">Error al cargar tus exámenes.</p>';
     }
   }
-  
 
   // ============================================
   // LÓGICA DE NAVEGACIÓN Y SESIÓN
@@ -394,9 +518,13 @@
 
     if (usuarioActivo.rol === 'admin') {
       adminPanel.classList.remove('hidden');
+      navLinks.classList.add('hidden'); // Ocultar links de paciente al admin
+      mobileNav.classList.add('hidden');
       renderAdminPanel();
     } else {
       mainPatientContent.classList.remove('hidden');
+      navLinks.classList.remove('hidden');
+      mobileNav.classList.remove('hidden');
       renderPatientDashboard(usuarioActivo);
     }
   }
@@ -412,14 +540,13 @@
     mostrarSitio(usuario);
   }
 
-  // Inicialización
-  inicializarAdmin();
+  // Comprobar sesión al cargar
   const sesionActiva = obtenerSesion();
   if (sesionActiva && sesionActiva.correo) {
     mostrarSitio(sesionActiva);
   }
 
-  // Formularios de Login/Registro
+  // Formularios de Login/Registro UI[cite: 1]
   const tabLogin = document.getElementById('tab-login');
   const tabRegister = document.getElementById('tab-register');
   const loginForm = document.getElementById('login-form');
@@ -429,9 +556,11 @@
   function activarTab(tab) {
     const esLogin = tab === 'login';
     tabLogin.classList.toggle('bg-white', esLogin);
+    tabLogin.classList.toggle('shadow-sm', esLogin);
     tabLogin.classList.toggle('text-primary', esLogin);
     tabLogin.classList.toggle('text-ink-soft', !esLogin);
     tabRegister.classList.toggle('bg-white', !esLogin);
+    tabRegister.classList.toggle('shadow-sm', !esLogin);
     tabRegister.classList.toggle('text-primary', !esLogin);
     tabRegister.classList.toggle('text-ink-soft', esLogin);
     loginForm.classList.toggle('hidden', !esLogin);
@@ -442,9 +571,7 @@
   tabLogin.addEventListener('click', () => activarTab('login'));
   tabRegister.addEventListener('click', () => activarTab('register'));
 
-  // ============================================
-  // NUEVO BACKEND: REGISTRO DE USUARIO
-  // ============================================
+  // BACKEND: REGISTRO
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nombre = document.getElementById('register-nombre').value.trim();
@@ -452,62 +579,44 @@
     const password = document.getElementById('register-password').value;
 
     try {
-      // Hacemos la petición POST a nuestra nueva ruta
       const respuesta = await fetch('/api/auth/registro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, correo, password })
       });
-
       const datos = await respuesta.json();
-
-      // Si el servidor responde con un error (ej. correo ya existe)
       if (!respuesta.ok) {
         authMensaje.textContent = datos.mensaje || 'Error al crear la cuenta.';
         authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
         return;
       }
-
-      // Si fue exitoso, guardamos la sesión y entramos
       iniciarSesion(datos);
-      
     } catch (error) {
-      console.error(error);
       authMensaje.textContent = 'No se pudo conectar con el servidor.';
       authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
     }
   });
 
-  // ============================================
-  // NUEVO BACKEND: LOGIN DE USUARIO
-  // ============================================
+  // BACKEND: LOGIN
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const correo = document.getElementById('login-correo').value.trim().toLowerCase();
     const password = document.getElementById('login-password').value;
 
     try {
-      // Hacemos la petición POST a nuestra ruta de login
       const respuesta = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo, password })
       });
-
       const datos = await respuesta.json();
-
-      // Si las credenciales son incorrectas
       if (!respuesta.ok) {
         authMensaje.textContent = datos.mensaje || 'Error al iniciar sesión.';
         authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
         return;
       }
-
-      // Si fue exitoso, guardamos la sesión local y entramos
       iniciarSesion(datos);
-
     } catch (error) {
-      console.error(error);
       authMensaje.textContent = 'No se pudo conectar con el servidor.';
       authMensaje.className = 'mt-4 text-sm text-center text-red-600 font-medium';
     }
