@@ -15,7 +15,7 @@ const obtenerCatalogo = async (req, res) => {
 const obtenerPacientes = async (req, res) => {
     try {
         // Buscamos solo a los usuarios con rol 'paciente'
-        const [pacientes] = await pool.query('SELECT id, nombre, correo FROM usuarios WHERE rol = "paciente"');
+        const [pacientes] = await pool.query('SELECT id, nombre, correo FROM usuarios WHERE rol = ?', ['paciente']);
 
         // Por cada paciente, buscamos sus exámenes asignados
         for (let paciente of pacientes) {
