@@ -231,38 +231,92 @@
       </div>
     </section>
 
-    <!-- ===== PREGUNTAS FRECUENTES ===== -->
-    <section id="preguntas-frecuentes" class="py-16 sm:py-24 bg-white">
+    <!-- ===== FAQ ACCORDION ===== -->
+    <section id="preguntas-frecuentes" class="pb-16 sm:pb-24">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-center text-sm font-semibold uppercase tracking-wider text-primary mb-8">Preguntas Frecuentes</h2>
 
         <div id="faq-list" class="space-y-3">
+
           <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
             <h3>
-              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl">
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl" aria-expanded="false" aria-controls="faq-answer-1" id="faq-question-1">
                 <span class="faq-question-text font-semibold text-ink">¿Necesito venir en ayunas?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
             </h3>
-            <div class="faq-answer">
-              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Depende del examen. Pruebas como la química sanguínea (glucosa, colesterol, triglicéridos) suelen requerir entre 8 y 12 horas de ayuno. Otras, como la biometría hemática o el examen general de orina, no lo requieren.</p>
+            <div id="faq-answer-1" class="faq-answer" role="region" aria-labelledby="faq-question-1">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Depende del examen. Pruebas como la química sanguínea (glucosa, colesterol, triglicéridos) suelen requerir entre 8 y 12 horas de ayuno. Otras, como la biometría hemática o el examen general de orina, no lo requieren. Verifica la ficha de tu examen o pregúntanos por WhatsApp.</p>
             </div>
           </div>
-          
+
           <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
             <h3>
-              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl">
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl" aria-expanded="false" aria-controls="faq-answer-2" id="faq-question-2">
                 <span class="faq-question-text font-semibold text-ink">¿Cuánto tiempo tarda la entrega de resultados?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
             </h3>
-            <div class="faq-answer">
-              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">La mayoría de los exámenes de rutina están listos en 24 horas. Algunos estudios especializados pueden tardar entre 2 y 5 días hábiles. Podrás revisarlos directamente aquí en tu panel.</p>
+            <div id="faq-answer-2" class="faq-answer" role="region" aria-labelledby="faq-question-2">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">La mayoría de los exámenes de rutina están listos en 24 horas. Algunos estudios especializados pueden tardar entre 2 y 5 días hábiles. Te avisamos por el medio que prefieras en cuanto estén disponibles.</p>
             </div>
           </div>
+
+          <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
+            <h3>
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl" aria-expanded="false" aria-controls="faq-answer-3" id="faq-question-3">
+                <span class="faq-question-text font-semibold text-ink">¿Debo agendar cita o puedo ir directamente?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </h3>
+            <div id="faq-answer-3" class="faq-answer" role="region" aria-labelledby="faq-question-3">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Puedes acercarte directamente en nuestro horario de atención para la mayoría de los exámenes, sin cita previa. Para estudios especializados o toma de muestra a domicilio, te recomendamos agendar con anticipación.</p>
+            </div>
+          </div>
+
+          <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
+            <h3>
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl" aria-expanded="false" aria-controls="faq-answer-4" id="faq-question-4">
+                <span class="faq-question-text font-semibold text-ink">¿Cómo debo prepararme para un examen de sangre o orina?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </h3>
+            <div id="faq-answer-4" class="faq-answer" role="region" aria-labelledby="faq-question-4">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Para exámenes de sangre, mantente hidratado y respeta el ayuno indicado si aplica. Para orina, se recomienda la primera muestra de la mañana en un envase estéril. Evita ejercicio intenso 24 horas antes de la toma de muestra.</p>
+            </div>
+          </div>
+
+          <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
+            <h3>
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl" aria-expanded="false" aria-controls="faq-answer-5" id="faq-question-5">
+                <span class="faq-question-text font-semibold text-ink">¿Qué debo llevar el día de mi cita?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </h3>
+            <div id="faq-answer-5" class="faq-answer" role="region" aria-labelledby="faq-question-5">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Trae tu documento de identidad, la orden médica si tu doctor te la entregó y tu carné de seguro si aplica. Si es un examen de control, también es útil traer resultados anteriores.</p>
+            </div>
+          </div>
+
+          <div class="faq-item border border-ink-faint/25 rounded-xl bg-white">
+            <h3>
+              <button type="button" class="faq-question w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5 hover:bg-surface transition-colors rounded-xl" aria-expanded="false" aria-controls="faq-answer-6" id="faq-question-6">
+                <span class="faq-question-text font-semibold text-ink">¿Cómo recibo mis resultados?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="faq-icon w-5 h-5 flex-shrink-0 text-primary"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </h3>
+            <div id="faq-answer-6" class="faq-answer" role="region" aria-labelledby="faq-question-6">
+              <p class="px-5 pb-5 sm:px-6 sm:pb-6 text-ink-soft leading-relaxed">Puedes consultarlos en línea con tu número de orden, recibirlos por correo electrónico o recogerlos impresos en el laboratorio. Eliges la opción al momento de tu toma de muestra.</p>
+            </div>
+          </div>
+
         </div>
+
+        <p id="faq-no-results" class="hidden text-center text-ink-faint py-8">
+          No encontramos resultados para tu búsqueda. Intenta con otra palabra o
+          <a href="https://wa.me/000000000000?text=Hola%2C%20tengo%20una%20duda" target="_blank" rel="noopener" class="text-primary font-semibold underline">escríbenos por WhatsApp</a>.
+        </p>
       </div>
-    </section>
   </div>
 
   <!-- ===== FOOTER ===== -->
