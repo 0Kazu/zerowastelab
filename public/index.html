@@ -78,7 +78,6 @@
           <nav class="flex items-center gap-6 text-sm font-medium text-ink-soft" id="patient-nav-links">
             <a href="#inicio" class="hover:text-primary-dark transition-colors">Inicio</a>
             <a href="#preguntas-frecuentes" class="hover:text-primary-dark transition-colors">Preguntas Frecuentes</a>
-            <a href="#examenes" class="hover:text-primary-dark transition-colors">Catálogo</a>
           </nav>
           <div class="flex items-center gap-4 pl-4 border-l border-ink-faint/25">
             <span class="text-sm text-ink-soft whitespace-nowrap">Hola, <span class="header-nombre-slot font-semibold text-ink"></span></span>
@@ -195,6 +194,29 @@
   <!-- CONTENIDO PARA PACIENTES        -->
   <!-- =============================== -->
   <div id="main-patient-content">
+    <section id="inicio" class="bg-gradient-to-b from-primary-tint/60 to-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 sm:pt-20 sm:pb-16 text-center">
+        <span class="inline-flex items-center gap-2 rounded-full bg-primary-tint text-primary text-xs font-semibold px-4 py-1.5 mb-6">
+          Antes de tu examen
+        </span>
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-ink tracking-tight leading-tight">
+          ¿Tienes dudas antes de tu examen?<br class="hidden sm:block"> <span class="text-primary">Aquí están las respuestas.</span>
+        </h1>
+        <p class="mt-5 text-lg text-ink-soft max-w-2xl mx-auto">
+          Encuentra en segundos la información que necesitas para tu cita: ayuno, tiempos de entrega, preparación y mucho más.
+        </p>
+
+        <div class="mt-8 max-w-xl mx-auto">
+          <label for="faq-search" class="sr-only">Buscar una pregunta frecuente</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-ink-faint">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/></svg>
+            </span>
+            <input type="text" id="faq-search" placeholder="Busca tu duda: ayuno, resultados, cita..." class="w-full rounded-full border border-ink-faint/30 bg-white pl-12 pr-4 py-3.5 text-ink placeholder:text-ink-faint shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+        </div>
+      </div>
+    </section>
     
     <!-- DASHBOARD DEL PACIENTE (MIS EXÁMENES) -->
     <section class="bg-surface pt-12 pb-16 border-b border-ink-faint/20" id="inicio">
