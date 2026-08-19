@@ -329,42 +329,6 @@
     }
   };
 
-  // Función Admin: Asignar un nuevo examen
-  window.asignarExamen = function(correo) {
-    const select = document.getElementById(`select-exam-${correo}`);
-    const examenElegido = select.value;
-    const usuarios = obtenerUsuarios();
-    const index = usuarios.findIndex(u => u.correo === correo);
-
-    if (index !== -1) {
-      if (!usuarios[index].examenes) usuarios[index].examenes = [];
-      
-      // Evitar asignar el mismo examen si aún está pendiente
-      const yaExiste = usuarios[index].examenes.find(e => e.nombre === examenElegido && e.estado === 'pendiente');
-      if (yaExiste) {
-        alert('Este usuario ya tiene este examen asignado y pendiente.');
-        return;
-      }
-
-      usuarios[index].examenes.push({ nombre: examenElegido, estado: 'pendiente' });
-      guardarUsuarios(usuarios);
-      renderAdminPanel(); // Refrescar UI
-    }
-  };
-
-  // Función Admin: Cambiar de Pendiente a Listo
-  window.cambiarEstadoExamen = function(correo, examIndex) {
-    const usuarios = obtenerUsuarios();
-    const index = usuarios.findIndex(u => u.correo === correo);
-    if (index !== -1 && usuarios[index].examenes[examIndex]) {
-      const estadoActual = usuarios[index].examenes[examIndex].estado;
-      usuarios[index].examenes[examIndex].estado = (estadoActual === 'pendiente') ? 'listo' : 'pendiente';
-      guardarUsuarios(usuarios);
-      renderAdminPanel(); // Refrescar UI
-    }
-  };
-
-
   // ============================================
   // NUEVO BACKEND: PANEL DEL PACIENTE
   // ============================================
