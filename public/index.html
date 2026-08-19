@@ -404,7 +404,14 @@
       if (e.key === 'Enter') {
         e.preventDefault(); // Evita que la página intente recargarse
         ejecutarBusqueda(); // Dispara la búsqueda
-        faqSearchInput.blur(); // Quita el cursor del input (esconde el teclado en móviles)
+        faqSearchInput.blur(); // Quita el cursor del input (esconde el teclado)
+        
+        // --- NUEVO: Desplazamiento suave hacia los resultados ---
+        const faqSection = document.getElementById('preguntas-frecuentes');
+        if (faqSection) {
+          // 'block: start' alinea la sección en la parte superior de la pantalla
+          faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     });
   }
