@@ -41,9 +41,9 @@ const obtenerPacientes = async (req, res) => {
 const asignarExamen = async (req, res) => {
     const { usuario_id, examen_id } = req.body;
     try {
-        // Primero verificamos si ya lo tiene asignado y pendiente
+        // Usamos comillas simples para 'pendiente'
         const [existe] = await pool.query(
-            'SELECT id FROM examenes_asignados WHERE usuario_id = ? AND examen_id = ? AND estado = "pendiente"',
+            "SELECT id FROM examenes_asignados WHERE usuario_id = ? AND examen_id = ? AND estado = 'pendiente'",
             [usuario_id, examen_id]
         );
 
@@ -52,11 +52,12 @@ const asignarExamen = async (req, res) => {
         }
 
         await pool.query(
-            'INSERT INTO examenes_asignados (usuario_id, examen_id, estado) VALUES (?, ?, "pendiente")',
+            "INSERT INTO examenes_asignados (usuario_id, examen_id, estado) VALUES (?, ?, 'pendiente')",
             [usuario_id, examen_id]
         );
         res.status(201).json({ mensaje: 'Examen asignado correctamente' });
     } catch (error) {
+        console.error('Error al asignar:', error);
         res.status(500).json({ mensaje: 'Error al asignar examen' });
     }
 };
