@@ -368,30 +368,43 @@
   const faqSearchInput = document.getElementById('faq-search');
   const noResultsEl = document.getElementById('faq-no-results');
 
+  // 1. Centralizamos la lógica de búsqueda
+  function ejecutarBusqueda() {
+    const query = faqSearchInput.value.toLowerCase().trim();
+    let hasResults = false;
+
+    faqItems.forEach(item => {
+      // Buscamos tanto en la pregunta como en la respuesta
+      const textContent = item.textContent.toLowerCase();
+      
+      if (textContent.includes(query)) {
+        item.style.display = 'block';
+        hasResults = true;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    // 2. Mostramos u ocultamos el mensaje de "No hay coincidencias"
+    if (noResultsEl) {
+      if (!hasResults && query !== '') {
+        noResultsEl.classList.remove('hidden');
+      } else {
+        noResultsEl.classList.add('hidden');
+      }
+    }
+  }
+
   if (faqSearchInput) {
-    faqSearchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      let hasResults = false;
+    // Sigue buscando en tiempo real (por si borran o escriben)
+    faqSearchInput.addEventListener('input', ejecutarBusqueda);
 
-      faqItems.forEach(item => {
-        // Obtenemos el texto completo (pregunta + respuesta) para buscar en ambos lados
-        const textContent = item.textContent.toLowerCase();
-        
-        if (textContent.includes(query)) {
-          item.style.display = 'block';
-          hasResults = true;
-        } else {
-          item.style.display = 'none';
-        }
-      });
-
-      // Mostrar u ocultar el estado de "sin resultados"
-      if (noResultsEl) {
-        if (!hasResults && query !== '') {
-          noResultsEl.classList.remove('hidden');
-        } else {
-          noResultsEl.classList.add('hidden');
-        }
+    // Escucha específicamente la tecla Enter
+    faqSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Evita que la página intente recargarse
+        ejecutarBusqueda(); // Dispara la búsqueda
+        faqSearchInput.blur(); // Quita el cursor del input (esconde el teclado en móviles)
       }
     });
   }
@@ -450,7 +463,7 @@
             <div class="flex gap-2">
               <button onclick="window.cambiarEstadoExamen(${ex.asignacion_id}, '${ex.estado}')" 
                 class="text-xs font-semibold px-3 py-1.5 rounded-full transition-colors shadow-sm ${ex.estado === 'listo' ? 'bg-whatsapp/15 text-whatsapp-dark hover:bg-whatsapp/25' : 'bg-caution-tint text-caution hover:bg-caution/30'}">
-                ${ex.estado === 'listo' ? '✅ Listo' : '⏳ Pendiente'}
+                ${ex.estado === 'listo' ? 'Listo' : 'Pendiente'}
               </button>
               <button onclick="window.eliminarExamen(${ex.asignacion_id})" title="Eliminar examen"
                 class="text-xs bg-red-50 text-red-500 px-2.5 py-1.5 rounded-full hover:bg-red-100 transition-colors shadow-sm">
