@@ -194,7 +194,7 @@
   <!-- CONTENIDO PARA PACIENTES        -->
   <!-- =============================== -->
   <div id="main-patient-content">
-    <section id="inicio" class="bg-gradient-to-b from-primary-tint/60 to-white">
+    <section id="inicio-search" class="bg-gradient-to-b from-primary-tint/60 to-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 sm:pt-20 sm:pb-16 text-center">
         <span class="inline-flex items-center gap-2 rounded-full bg-primary-tint text-primary text-xs font-semibold px-4 py-1.5 mb-6">
           Antes de tu examen
@@ -234,7 +234,7 @@
     <!-- ===== FAQ ACCORDION ===== -->
     <section id="preguntas-frecuentes" class="pb-16 sm:pb-24">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-center text-sm font-semibold uppercase tracking-wider text-primary mb-8">Preguntas Frecuentes</h2>
+        <h2 class="text-center text-sm font-semibold uppercase tracking-wider text-primary mb-8 mt-12">Preguntas Frecuentes</h2>
 
         <div id="faq-list" class="space-y-3">
 
@@ -317,6 +317,7 @@
           <a href="https://wa.me/000000000000?text=Hola%2C%20tengo%20una%20duda" target="_blank" rel="noopener" class="text-primary font-semibold underline">escríbenos por WhatsApp</a>.
         </p>
       </div>
+    </section>
   </div>
 
   <!-- ===== FOOTER ===== -->
@@ -353,7 +354,7 @@
 <script>
   const AUTH_SESSION_KEY = 'zerowastelab_sesion';
 
-  // Acordeón UI para preguntas frecuentes[cite: 1]
+  // Acordeón UI para preguntas frecuentes
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach((item) => {
     item.querySelector('.faq-question').addEventListener('click', () => {
@@ -361,7 +362,41 @@
     });
   });
 
-  // Menú móvil[cite: 1]
+  // ============================================
+  // BÚSQUEDA EN PREGUNTAS FRECUENTES (FAQ)
+  // ============================================
+  const faqSearchInput = document.getElementById('faq-search');
+  const noResultsEl = document.getElementById('faq-no-results');
+
+  if (faqSearchInput) {
+    faqSearchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      let hasResults = false;
+
+      faqItems.forEach(item => {
+        // Obtenemos el texto completo (pregunta + respuesta) para buscar en ambos lados
+        const textContent = item.textContent.toLowerCase();
+        
+        if (textContent.includes(query)) {
+          item.style.display = 'block';
+          hasResults = true;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Mostrar u ocultar el estado de "sin resultados"
+      if (noResultsEl) {
+        if (!hasResults && query !== '') {
+          noResultsEl.classList.remove('hidden');
+        } else {
+          noResultsEl.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  // Menú móvil
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
   if (menuToggle && mobileMenu) {
@@ -556,7 +591,7 @@
 
     if (usuarioActivo.rol === 'admin') {
       adminPanel.classList.remove('hidden');
-      navLinks.classList.add('hidden'); // Ocultar links de paciente al admin
+      navLinks.classList.add('hidden');
       mobileNav.classList.add('hidden');
       renderAdminPanel();
     } else {
@@ -578,13 +613,11 @@
     mostrarSitio(usuario);
   }
 
-  // Comprobar sesión al cargar
   const sesionActiva = obtenerSesion();
   if (sesionActiva && sesionActiva.correo) {
     mostrarSitio(sesionActiva);
   }
 
-  // Formularios de Login/Registro UI[cite: 1]
   const tabLogin = document.getElementById('tab-login');
   const tabRegister = document.getElementById('tab-register');
   const loginForm = document.getElementById('login-form');
